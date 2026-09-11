@@ -1,0 +1,172 @@
+{
+  "meta": {
+    "nombre": "Seed inicial de ubicaciones - Hacha y Tiza",
+    "alcance": "Partido de La Plata",
+    "version": 1,
+    "nota": "Seed inicial orientado al MVP. Puede ampliarse con barrios/localidades adicionales y normalización mediante Georef Argentina."
+  },
+  "localidades": [
+    {
+      "id": "la-plata-abasto",
+      "nombre": "Abasto",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-altos-de-san-lorenzo",
+      "nombre": "Altos de San Lorenzo",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-angel-etcheverry",
+      "nombre": "Ángel Etcheverry",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-arturo-segui",
+      "nombre": "Arturo Seguí",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-casco-urbano",
+      "nombre": "Casco Urbano",
+      "tipo": "ZONA",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-city-bell",
+      "nombre": "City Bell",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-el-peligro",
+      "nombre": "El Peligro",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-joaquin-gorina",
+      "nombre": "Joaquín Gorina",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-jose-hernandez",
+      "nombre": "José Hernández",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-lisandro-olmos",
+      "nombre": "Lisandro Olmos",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-los-hornos",
+      "nombre": "Los Hornos",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-manuel-b-gonnet",
+      "nombre": "Manuel B. Gonnet",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-melchor-romero",
+      "nombre": "Melchor Romero",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-ringuelet",
+      "nombre": "Ringuelet",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-san-carlos",
+      "nombre": "San Carlos",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-tolosa",
+      "nombre": "Tolosa",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-villa-elisa",
+      "nombre": "Villa Elisa",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    },
+    {
+      "id": "la-plata-villa-elvira",
+      "nombre": "Villa Elvira",
+      "tipo": "LOCALIDAD",
+      "ciudad": "La Plata",
+      "provincia": "Buenos Aires",
+      "pais": "Argentina",
+      "activo": true
+    }
+  ]
+}
