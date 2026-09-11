@@ -1,13 +1,13 @@
 ---
 id: FND-02
 title: Configuración base del backend
-status: pending
+status: in-progress
 phase: foundation
 depends_on:
   - FND-01
 created_at: 2026-09-11T04:24:37-03:00
-updated_at: 2026-09-11T04:24:37-03:00
-started_at: null
+updated_at: 2026-09-11T15:38:34-03:00
+started_at: 2026-09-11T15:38:34-03:00
 resolved_at: null
 resolution_commit: null
 ---
