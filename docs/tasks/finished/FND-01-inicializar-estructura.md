@@ -1,3 +1,16 @@
+---
+id: FND-01
+title: Inicializar estructura del proyecto
+status: finished
+phase: foundation
+depends_on: []
+created_at: 2026-09-11T04:24:37-03:00
+updated_at: 2026-09-11T05:11:33-03:00
+started_at: null
+resolved_at: 2026-09-11T05:11:33-03:00
+resolution_commit: 56ee6487fdce253145043410816d2aa6b70a24c9
+---
+
 # FND-01 — Inicializar estructura del proyecto
 
 ## Objetivo
@@ -46,6 +59,7 @@ No agregar paquetes o abstracciones que no sean necesarias para completar esta t
 - backend inicia correctamente;
 - ambos proyectos compilan;
 - no existen secretos versionados.
+
 ---
 
 ## Reglas de ejecución

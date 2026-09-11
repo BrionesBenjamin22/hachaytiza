@@ -1,3 +1,17 @@
+---
+id: FND-05
+title: Seeds de desarrollo
+status: pending
+phase: foundation
+depends_on:
+  - FND-04
+created_at: 2026-09-11T04:24:37-03:00
+updated_at: 2026-09-11T04:24:37-03:00
+started_at: null
+resolved_at: null
+resolution_commit: null
+---
+
 # FND-05 — Seeds de desarrollo
 
 ## Objetivo
@@ -29,6 +43,7 @@ No cargar datos ficticios automáticamente en producción.
 - seed puede ejecutarse más de una vez sin generar duplicados;
 - ubicaciones quedan disponibles correctamente;
 - proceso está documentado.
+
 ---
 
 ## Reglas de ejecución

@@ -1,39 +1,52 @@
-# FND-06 — Calidad y scripts del repositorio
+---
+id: FND-07
+title: CI con GitHub Actions
+status: pending
+phase: foundation
+depends_on:
+  - FND-06
+created_at: 2026-09-11T04:24:37-03:00
+updated_at: 2026-09-11T04:24:37-03:00
+started_at: null
+resolved_at: null
+resolution_commit: null
+---
+
+# FND-07 — CI con GitHub Actions
 
 ## Objetivo
 
-Unificar las verificaciones que todos los agentes deberán ejecutar.
+Evitar integrar código que no haya sido validado.
 
 ## Dependencias
 
-- `FND-02`;
-- `FND-03`.
+- `FND-06`.
 
 ## Tareas
 
-Definir desde la raíz comandos equivalentes a:
+Crear pipeline para PRs hacia `dev` y `main`.
+
+Debe ejecutar como mínimo:
 
 ```text
-pnpm lint
-pnpm typecheck
-pnpm test
-pnpm build
+install
+lint
+typecheck
+tests
+build
 ```
 
-Cuando corresponda, agregar:
+Agregar integration tests cuando ya existan y sean viables dentro del pipeline.
 
-```text
-pnpm test:integration
-pnpm test:e2e
-```
-
-Configurar linting y formatting de forma consistente.
+Utilizar caché de dependencias cuando sea apropiado, sin agregar complejidad innecesaria.
 
 ## Criterios de aceptación
 
-- comandos funcionan desde la raíz;
-- un fallo en frontend o backend hace fallar el comando correspondiente;
-- no existen pasos manuales ocultos para validar el proyecto.
+- CI se ejecuta automáticamente en PR;
+- cualquier validación fallida bloquea el pipeline;
+- frontend y backend son validados;
+- workflow no utiliza secretos hardcodeados.
+
 ---
 
 ## Reglas de ejecución

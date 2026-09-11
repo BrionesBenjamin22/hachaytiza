@@ -1,39 +1,55 @@
-# FND-04 — PostgreSQL y PostGIS
+---
+id: FND-06
+title: Calidad y scripts del repositorio
+status: pending
+phase: foundation
+depends_on:
+  - FND-02
+  - FND-03
+created_at: 2026-09-11T04:24:37-03:00
+updated_at: 2026-09-11T04:24:37-03:00
+started_at: null
+resolved_at: null
+resolution_commit: null
+---
+
+# FND-06 — Calidad y scripts del repositorio
 
 ## Objetivo
 
-Preparar la persistencia local del proyecto.
+Unificar las verificaciones que todos los agentes deberán ejecutar.
 
 ## Dependencias
 
-- `FND-01`.
-
-Puede ejecutarse en paralelo con `FND-02` y `FND-03`.
+- `FND-02`;
+- `FND-03`.
 
 ## Tareas
 
-- configurar PostgreSQL para desarrollo;
-- habilitar PostGIS;
-- integrar Prisma;
-- definir `DATABASE_URL`;
-- crear configuración inicial del schema;
-- crear primera migración;
-- verificar conexión desde backend;
-- documentar cómo levantar la base localmente.
+Definir desde la raíz comandos equivalentes a:
 
-No crear todavía entidades de negocio completas salvo lo mínimo requerido por la configuración.
+```text
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+```
 
-## Tests mínimos
+Cuando corresponda, agregar:
 
-- conexión a base de datos;
-- ejecución de migraciones sobre una base limpia.
+```text
+pnpm test:integration
+pnpm test:e2e
+```
+
+Configurar linting y formatting de forma consistente.
 
 ## Criterios de aceptación
 
-- backend conecta correctamente;
-- migraciones pueden ejecutarse;
-- PostGIS está habilitado;
-- una instalación limpia puede reproducirse.
+- comandos funcionan desde la raíz;
+- un fallo en frontend o backend hace fallar el comando correspondiente;
+- no existen pasos manuales ocultos para validar el proyecto.
+
 ---
 
 ## Reglas de ejecución

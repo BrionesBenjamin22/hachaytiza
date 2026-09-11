@@ -1,3 +1,17 @@
+---
+id: FND-03
+title: Configuración base del frontend
+status: pending
+phase: foundation
+depends_on:
+  - FND-01
+created_at: 2026-09-11T04:24:37-03:00
+updated_at: 2026-09-11T04:24:37-03:00
+started_at: null
+resolved_at: null
+resolution_commit: null
+---
+
 # FND-03 — Configuración base del frontend
 
 ## Objetivo
@@ -49,6 +63,7 @@ No implementar todavía pantallas funcionales completas.
 - configuración persiste en cliente;
 - cliente HTTP puede consumir una URL configurable del backend;
 - build de Next.js pasa.
+
 ---
 
 ## Reglas de ejecución

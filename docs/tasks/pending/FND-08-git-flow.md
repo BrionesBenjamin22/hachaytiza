@@ -1,3 +1,17 @@
+---
+id: FND-08
+title: Flujo Git y protección de integración
+status: pending
+phase: foundation
+depends_on:
+  - FND-07
+created_at: 2026-09-11T04:24:37-03:00
+updated_at: 2026-09-11T04:24:37-03:00
+started_at: null
+resolved_at: null
+resolution_commit: null
+---
+
 # FND-08 — Flujo Git y protección de integración
 
 ## Objetivo
@@ -42,6 +56,7 @@ No realizar desarrollo directo sobre `main`.
 - flujo queda documentado;
 - agentes pueden identificar claramente rama destino;
 - las reglas coinciden con `AGENTS.md`.
+
 ---
 
 ## Reglas de ejecución

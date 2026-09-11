@@ -1,3 +1,24 @@
+---
+id: FND-09
+title: Smoke test de Foundation
+status: pending
+phase: foundation
+depends_on:
+  - FND-01
+  - FND-02
+  - FND-03
+  - FND-04
+  - FND-05
+  - FND-06
+  - FND-07
+  - FND-08
+created_at: 2026-09-11T04:24:37-03:00
+updated_at: 2026-09-11T04:24:37-03:00
+started_at: null
+resolved_at: null
+resolution_commit: null
+---
+
 # FND-09 — Smoke test de Foundation
 
 ## Objetivo
@@ -37,6 +58,7 @@ Desde un entorno limpio:
 Todos los pasos finalizan correctamente sin modificaciones manuales no documentadas.
 
 La fase Foundation puede considerarse terminada únicamente si este smoke test pasa completo.
+
 ---
 
 ## Reglas de ejecución

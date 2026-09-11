@@ -1,3 +1,17 @@
+---
+id: FND-02
+title: Configuración base del backend
+status: pending
+phase: foundation
+depends_on:
+  - FND-01
+created_at: 2026-09-11T04:24:37-03:00
+updated_at: 2026-09-11T04:24:37-03:00
+started_at: null
+resolved_at: null
+resolution_commit: null
+---
+
 # FND-02 — Configuración base del backend
 
 ## Objetivo
@@ -36,6 +50,7 @@ No implementar autenticación todavía.
 - Swagger puede generarse;
 - configuración inválida de entorno falla de forma explícita;
 - backend compila y tests pasan.
+
 ---
 
 ## Reglas de ejecución
