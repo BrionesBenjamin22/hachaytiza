@@ -5,10 +5,10 @@ status: finished
 phase: product
 depends_on: [SLICE-02]
 created_at: 2026-10-07T19:57:40-03:00
-updated_at: 2026-10-07T19:59:39-03:00
+updated_at: 2026-10-07T20:27:40-03:00
 started_at: 2026-10-07T19:57:40-03:00
 resolved_at: 2026-10-07T19:59:39-03:00
-resolution_commit: null
+resolution_commit: cd4172db9ec0566fedf384533055ef53326095f9
 ---
 
 Separar título, descripción, campos y acciones secundarias del login con jerarquía y espaciado explícitos. AuthForm compartido conserva validaciones y contratos de login/registro. Mostrar borde rojo y mensaje cuando un campo sea inválido; mantener foco visible y asociaciones accesibles. No generar espacios mediante párrafos de error vacíos ni referencias a IDs inexistentes. Mantener landing y 404 aprobadas intactas.
@@ -24,3 +24,7 @@ Lint, typecheck y build completos aprobados. Unitarios: 54 (16 API y 38 frontend
 Ambos casos funcionales de navegador aprobados. Login pasó sin catálogo; registro requirió restaurar API y el contenedor PostgreSQL de desarrollo existentes, detenidos durante la interrupción. GET de localidades volvió a responder 200 con 18 localidades y el caso de registro aprobó sin cambiar expectativas ni mockear el catálogo. Las pruebas no enviaron POST de autenticación ni crearon cuentas o emails.
 
 Revisión final de seguridad aprobada sin bloqueos. Fuente, documentación, tests y diff revisados; índice vacío tras los tres commits autorizados. Los archivos nuevos y diferencias del login permanecen sin commit para revisión del usuario. Frontend en localhost:3000 y API en localhost:3001, con PostgreSQL saludable. Sin comprobaciones de aspecto ni capturas.
+
+## Registro posterior de commit
+
+El usuario autorizó guardar esta etapa. El cambio quedó registrado en cd4172db9ec0566fedf384533055ef53326095f9. Las referencias previas a cambios sin commit describen el cierre anterior a esa autorización. No se realizó push.
