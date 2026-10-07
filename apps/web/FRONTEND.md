@@ -15,6 +15,8 @@
 
 Por decisión temporal del usuario, las contraseñas de registro, restablecimiento y cambio aceptan entre 8 y 128 caracteres. `passwordSchema` centraliza la política y las ayudas muestran el mismo rango. Login conserva su validación de presencia en frontend (mínimo 1 y máximo 128); el DTO del backend valida el rango de 8 a 128 también al ingresar.
 
+`features/auth/auth-form.tsx` separa encabezado, descripción, campos, acción principal y pie con recuperación de cuenta. Los espacios del formulario se definen explícitamente, sin párrafos de error vacíos. Los errores de campo mantienen su mensaje y `aria-invalid`; los controles reutilizados (`input`, `select`, selector de localidad) muestran un borde rojo según esa señal, conservando el foco visible. `aria-describedby` referencia exclusivamente ayudas y errores presentes, incluyendo la ayuda de contraseña sólo durante el registro. Los errores generales del servidor permanecen en un aviso global, sin atribuirlos a un campo. No cambia el contrato, validación ni manejo de sesión.
+
 Los enlaces nuevos abiertos sobre la misma pantalla se capturan también mediante `hashchange`: se retira el fragmento, se limpia el formulario y su resultado anterior. Las respuestas de una solicitud anterior no borran el token ni alteran el resultado del enlace nuevo. No se ejecutan mutaciones al navegar al enlace.
 
 ## Módulos y contratos
