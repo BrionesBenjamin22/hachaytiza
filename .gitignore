@@ -10,3 +10,6 @@ coverage/
 
 /.codex/
 /.agents/
+/.runtime/
+/test-results/
+/playwright-report/

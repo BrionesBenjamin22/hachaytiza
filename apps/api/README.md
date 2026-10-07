@@ -14,11 +14,11 @@ API de Hacha y Tiza construida con NestJS, Express y TypeScript.
 - aplica Helmet y CORS con credenciales para orígenes exactos configurados;
 - publica Swagger UI en `/api/v1/docs` y OpenAPI JSON en `/api/v1/docs-json`.
 
-No se implementan autenticación, cookies ni protección CSRF en FND-02 porque todavía no existen endpoints mutables ni de sesión.
+La primera vertical slice agrega autenticación local, cookies seguras, CSRF, sesiones revocables, verificación y recuperación de contraseña, localidades y partidos filtrados. Ver [VERTICAL-SLICE.md](VERTICAL-SLICE.md) para configuración completa, persistencia y contratos actuales.
 
 ## Configuración
 
-Copiar los placeholders de `../../.env.example` a un archivo `.env` local. No versionar valores reales.
+Copiar los placeholders de `../../.env.example` a un archivo `.env` local. No versionar valores reales. Además de las variables HTTP siguientes, la slice requiere `DATABASE_URL`, `JWT_SECRET`, `CSRF_SECRET` y `FRONTEND_URL`; los secretos deben ser distintos y tener al menos 32 caracteres. Resend requiere `RESEND_API_KEY` y `EMAIL_FROM` para la entrega real de emails; ambas son obligatorias en producción.
 
 | Variable | Contrato |
 | --- | --- |
@@ -26,7 +26,7 @@ Copiar los placeholders de `../../.env.example` a un archivo `.env` local. No ve
 | `PORT` | Obligatoria. Entero entre `1` y `65535`. |
 | `CORS_ORIGINS` | Obligatoria. Lista de origins HTTP(S) exactos separada por comas; no acepta `*`, paths ni credenciales embebidas. |
 
-Ejemplo local:
+Configuración HTTP local (completar también las variables de persistencia y sesión anteriores):
 
 ```dotenv
 NODE_ENV=development
@@ -34,7 +34,7 @@ PORT=3001
 CORS_ORIGINS=http://localhost:3000
 ```
 
-En producción, `CORS_ORIGINS` debe contener exclusivamente el origen controlado del frontend Furvo. CORS usa `credentials: true` y nunca combina credenciales con un comodín.
+En producción, `CORS_ORIGINS` debe contener exclusivamente el origen controlado del frontend Hacha y Tiza. CORS usa `credentials: true` y nunca combina credenciales con un comodín.
 
 ## Contratos HTTP
 

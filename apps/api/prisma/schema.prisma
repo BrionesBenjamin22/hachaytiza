@@ -1,0 +1,126 @@
+generator client {
+  provider = "prisma-client-js"
+}
+datasource db {
+  provider = "postgresql"
+  url = env("DATABASE_URL")
+}
+enum LocationType {
+  PROVINCIA
+  CIUDAD
+  LOCALIDAD
+  BARRIO
+  ZONA
+}
+enum FootballType {
+  FIVE
+  SIX
+  SEVEN
+}
+enum MatchStatus {
+  OPEN
+  CLOSED
+  CANCELLED
+}
+enum ParticipationRole {
+  ORGANIZER
+  PLAYER
+}
+enum EmailTokenKind {
+  VERIFY
+  RESET
+}
+model Location {
+  id String @id @default(uuid()) @db.Uuid
+  seedKey String? @unique
+  name String
+  type LocationType
+  parentId String? @db.Uuid
+  parent Location? @relation("LocationTree", fields: [parentId], references: [id])
+  children Location[] @relation("LocationTree")
+  active Boolean @default(true)
+  users User[]
+  matches Match[]
+  @@index([active, name])
+}
+model User {
+  id String @id @default(uuid()) @db.Uuid
+  name String
+  email String @unique
+  passwordHash String?
+  emailVerifiedAt DateTime? @db.Timestamptz(3)
+  primaryLocationId String? @db.Uuid
+  primaryLocation Location? @relation(fields:[primaryLocationId], references:[id])
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  sessions Session[]
+  emailTokens EmailToken[]
+  organizedMatches Match[]
+  participations Participation[]
+  profileChanges UserProfileChange[]
+}
+model UserProfileChange {
+  id String @id @default(uuid()) @db.Uuid
+  userId String @db.Uuid
+  user User @relation(fields:[userId], references:[id], onDelete:Cascade)
+  occurredAt DateTime @default(now()) @db.Timestamptz(3)
+  changes Json
+  @@index([userId, occurredAt, id])
+}
+model Session {
+  id String @id @default(uuid()) @db.Uuid
+  userId String @db.Uuid
+  user User @relation(fields:[userId], references:[id], onDelete:Cascade)
+  refreshHash String @unique
+  expiresAt DateTime @db.Timestamptz(3)
+  revokedAt DateTime? @db.Timestamptz(3)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  @@index([userId])
+}
+model UsedRefreshToken {
+  hash String @id
+  sessionId String @db.Uuid
+  expiresAt DateTime @db.Timestamptz(3)
+  @@index([expiresAt])
+}
+model EmailToken {
+  id String @id @default(uuid()) @db.Uuid
+  userId String @db.Uuid
+  user User @relation(fields:[userId], references:[id], onDelete:Cascade)
+  hash String @unique
+  kind EmailTokenKind
+  expiresAt DateTime @db.Timestamptz(3)
+  usedAt DateTime? @db.Timestamptz(3)
+  @@index([userId, kind])
+}
+model Match {
+  id String @id @default(uuid()) @db.Uuid
+  seedKey String? @unique
+  organizerId String @db.Uuid
+  organizer User @relation(fields:[organizerId], references:[id])
+  locationId String @db.Uuid
+  location Location @relation(fields:[locationId], references:[id])
+  footballType FootballType
+  startsAt DateTime @db.Timestamptz(3)
+  venueName String
+  address String
+  pricePerPerson Decimal @db.Decimal(10,2)
+  availablePlaces Int
+  description String?
+  status MatchStatus @default(OPEN)
+  createdAt DateTime @default(now()) @db.Timestamptz(3)
+  updatedAt DateTime @updatedAt @db.Timestamptz(3)
+  participations Participation[]
+  @@index([locationId, startsAt, id])
+}
+model Participation {
+  id String @id @default(uuid()) @db.Uuid
+  userId String @db.Uuid
+  user User @relation(fields:[userId], references:[id])
+  matchId String @db.Uuid
+  match Match @relation(fields:[matchId], references:[id])
+  role ParticipationRole
+  localDate DateTime @db.Date
+  active Boolean @default(true)
+  @@unique([userId, matchId])
+}

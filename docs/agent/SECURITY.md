@@ -54,8 +54,8 @@ cuando la configuración del dominio lo permita.
 Ejemplo conceptual:
 
 ```text
-__Host-furvo-access
-__Host-furvo-refresh
+__Host-<cookie-de-acceso>
+__Host-<cookie-de-refresh>
 ```
 
 No establecer atributo `Domain` para cookies `__Host-`.
@@ -67,11 +67,11 @@ No establecer atributo `Domain` para cookies `__Host-`.
 Objetivo productivo:
 
 ```text
-app.furvo.<tld>
-api.furvo.<tld>
+app.<dominio-controlado>
+api.<dominio-controlado>
 ```
 
-Frontend y API deberán operar bajo dominios controlados por Furvo.
+Frontend y API deberán operar bajo dominios controlados por Hacha y Tiza. Los nombres efectivos de cookies existentes se conservan por compatibilidad; los ejemplos anteriores describen sus atributos, sin autorizar renombrarlas.
 
 Esto simplifica políticas de cookies, CORS y CSRF.
 
@@ -311,7 +311,7 @@ No confiar únicamente en `SameSite`.
 Producción:
 
 ```text
-origin = frontend Furvo
+origin = frontend Hacha y Tiza
 credentials = true
 ```
 
@@ -351,6 +351,18 @@ No almacenar contraseña reversible.
 No loggear contraseña.
 
 No devolver hash mediante DTO.
+
+## Cambio de contraseña autenticado
+
+La segunda iteración permite cambiar la contraseña local con sesión vigente, contraseña actual y nueva contraseña. La confirmación de la nueva contraseña se valida en frontend; backend vuelve a validar credenciales y los requisitos existentes de password.
+
+Decisión explícita del usuario: después del cambio se revocan todas las sesiones, incluida la actual, se eliminan las cookies de autenticación y se vuelve a Login. Los enlaces de recuperación todavía vigentes también se invalidan. No se cambia la estrategia de access y refresh ni se renueva la sesión silenciosamente.
+
+Cambio, recuperación y creación de sesión deben coordinarse transaccionalmente para impedir que un login validado con una contraseña anterior cree una sesión utilizable después de la revocación. Las cuentas sin contraseña local deben distinguirse mediante un indicador seguro, sin exponer hashes.
+
+## Edición del perfil propio
+
+`/users/me` deriva la identidad de la sesión y permite actualizar únicamente nombre y localidad principal de catálogo. Email, identificadores internos, estado de verificación y campos de credenciales no son editables en esta etapa. El historial de campos es privado al titular y nunca incluye contraseñas, hashes ni tokens. Toda mutación conserva la protección CSRF y la validación de Origin.
 
 ---
 
