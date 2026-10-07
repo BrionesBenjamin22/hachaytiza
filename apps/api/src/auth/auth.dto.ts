@@ -10,9 +10,9 @@ export class LoginDto {
   @IsEmail()
   @MaxLength(254)
   email: string;
-  @ApiProperty({ minLength: 12, maxLength: 128 })
+  @ApiProperty({ minLength: 8, maxLength: 128 })
   @IsString()
-  @Length(12, 128)
+  @Length(8, 128)
   password: string;
 }
 export class RegisterDto extends LoginDto {
@@ -46,18 +46,18 @@ export class TokenDto {
   token: string;
 }
 export class ResetPasswordDto extends TokenDto {
-  @ApiProperty({ minLength: 12, maxLength: 128 })
+  @ApiProperty({ minLength: 8, maxLength: 128 })
   @IsString()
-  @Length(12, 128)
+  @Length(8, 128)
   password: string;
 }
 export class ChangePasswordDto {
-  @ApiProperty({ minLength: 12, maxLength: 128 })
+  @ApiProperty({ minLength: 8, maxLength: 128 })
   @IsString()
-  @Length(12, 128)
+  @Length(8, 128)
   currentPassword: string;
-  @ApiProperty({ minLength: 12, maxLength: 128 })
+  @ApiProperty({ minLength: 8, maxLength: 128 })
   @IsString()
-  @Length(12, 128)
+  @Length(8, 128)
   newPassword: string;
 }

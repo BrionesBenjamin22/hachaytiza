@@ -7,11 +7,13 @@
 - `/account/profile`: edición del nombre y localidad principal, email de solo lectura, auditoría e historial con páginas de 3 cambios. Envía exclusivamente diferencias; sin cambios no llama al backend.
 - `/account/security`: contraseña actual, nueva y confirmación. El backend revoca todas las sesiones; el cliente limpia datos privados y vuelve al login con mensaje de éxito.
 - `/account/appearance`: tema claro, oscuro o sistema. Persiste exclusivamente una preferencia visual en `hyt-theme-v1`; no contiene datos de autenticación.
-- `/auth/register`: nombre, email, contraseña (12 a 128 caracteres) y localidad de catálogo. Registro crea sesión y dirige al Home.
+- `/auth/register`: nombre, email, contraseña (8 a 128 caracteres) y localidad de catálogo. Registro crea sesión y dirige al Home.
 - `/auth/login`: ingreso y restauración de datos mediante `/auth/session`.
 - `/auth/location`: requiere sesión vigente; completa únicamente la localidad faltante mediante `PATCH /users/me/location`.
 - `/auth/forgot-password`: solicitud con respuesta genérica para evitar enumeración.
 - `/auth/reset-password#token=...` y `/auth/verify-email#token=...`: capturan el token en memoria, retiran el fragmento de la URL y requieren confirmación explícita. Un nuevo enlace en la misma pantalla reemplaza el token y limpia el formulario; una respuesta anterior no altera el enlace nuevo. Referrer policy `no-referrer`, sin indexación.
+
+Por decisión temporal del usuario, las contraseñas de registro, restablecimiento y cambio aceptan entre 8 y 128 caracteres. `passwordSchema` centraliza la política y las ayudas muestran el mismo rango. Login conserva su validación de presencia en frontend (mínimo 1 y máximo 128); el DTO del backend valida el rango de 8 a 128 también al ingresar.
 
 Los enlaces nuevos abiertos sobre la misma pantalla se capturan también mediante `hashchange`: se retira el fragmento, se limpia el formulario y su resultado anterior. Las respuestas de una solicitud anterior no borran el token ni alteran el resultado del enlace nuevo. No se ejecutan mutaciones al navegar al enlace.
 

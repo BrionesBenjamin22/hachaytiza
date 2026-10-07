@@ -194,7 +194,7 @@ Usar **`localhost`** para acceder desde el navegador: las cookies de sesión man
 ### 5. Probar el flujo
 
 1. Abrir la aplicación y seleccionar **Crear cuenta**.
-2. Completar nombre, email y una contraseña de entre 12 y 128 caracteres.
+2. Completar nombre, email y una contraseña de entre 8 y 128 caracteres (mínimo temporal autorizado).
 3. Buscar **Tolosa** y seleccionarla como localidad principal.
 4. Registrarse: se inicia sesión y aparece el Home con los partidos de Tolosa.
 5. Cambiar temporalmente el selector a **City Bell** para comprobar que cambia el listado sin modificar el perfil.

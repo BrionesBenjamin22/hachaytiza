@@ -25,7 +25,7 @@ Cada item del historial es `{id,occurredAt,changes}`. `changes.name` contiene `{
 
 ## Cambio de contraseña y concurrencia
 
-Se requiere una sesión de acceso válida, prueba de la contraseña actual y ambas contraseñas con longitud de 12 a 128 caracteres, preservando sus bytes sin trim. La confirmación de la nueva contraseña es una validación UX del frontend. Cuentas sin contraseña local reciben `LOCAL_PASSWORD_UNAVAILABLE`; la contraseña actual incorrecta produce `CURRENT_PASSWORD_INVALID`, con mensaje seguro. No se impone una regla nueva que prohíba reutilizar la contraseña actual.
+Se requiere una sesión de acceso válida, prueba de la contraseña actual y ambas contraseñas con longitud de 8 a 128 caracteres, preservando sus bytes sin trim. El mínimo de 8 es una excepción temporal aprobada por el usuario y documentada en `docs/agent/SECURITY.md`. La confirmación de la nueva contraseña es una validación UX del frontend. Cuentas sin contraseña local reciben `LOCAL_PASSWORD_UNAVAILABLE`; la contraseña actual incorrecta produce `CURRENT_PASSWORD_INVALID`, con mensaje seguro. No se impone una regla nueva que prohíba reutilizar la contraseña actual.
 
 La nueva contraseña se procesa con Argon2id y los parámetros de autenticación existentes. Una transacción vuelve a verificar el hash observado y la sesión bajo bloqueo del usuario, cambia el hash, revoca todas las sesiones —incluida la actual— e invalida enlaces de recuperación pendientes. Después se eliminan las cookies de acceso y refresh, se rota el nonce CSRF y el usuario vuelve al login con el mensaje de éxito. La política fue confirmada por Human in the Loop.
 

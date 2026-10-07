@@ -352,6 +352,10 @@ No loggear contraseña.
 
 No devolver hash mediante DTO.
 
+## Longitud temporal de contraseñas
+
+Por decisión explícita del usuario, el mínimo se reduce temporalmente de 12 a 8 caracteres. El límite vigente es de 8 a 128 caracteres para registro, login, restablecimiento y contraseña actual/nueva del cambio autenticado. Las contraseñas se preservan sin trim. Esta excepción afecta únicamente el mínimo de longitud; Argon2id, rate limiting, cookies, CSRF, sesiones y revocación conservan sus controles existentes. No tiene una fecha de reversión automática; restaurar el mínimo requiere una nueva decisión explícita.
+
 ## Cambio de contraseña autenticado
 
 La segunda iteración permite cambiar la contraseña local con sesión vigente, contraseña actual y nueva contraseña. La confirmación de la nueva contraseña se valida en frontend; backend vuelve a validar credenciales y los requisitos existentes de password.
