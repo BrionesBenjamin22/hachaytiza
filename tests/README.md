@@ -46,6 +46,16 @@ La segunda iteración añade landing, perfil con payload de diferencias reales y
 
 `E2E_WEB_URL` permite cambiar la URL del frontend; ajustar CORS del harness si se cambia su origen. `DATABASE_URL` es obligatorio para todo el harness. El puerto de API del harness es 3001 y no debe usarse simultáneamente por otro servidor. Las trazas están deshabilitadas para evitar almacenar credenciales o headers de cookies. No versionar resultados de pruebas.
 
+### Landing y carrusel sin modificar datos existentes
+
+`tests/landing-carousel.spec.ts` usa Playwright base, sin importar el harness de autenticación. Se ejecuta contra frontend y API locales ya iniciados y sólo recorre rutas públicas: no inicia otro servidor API, no crea cuentas, no sustituye email y no modifica la base. No genera capturas ni realiza revisión visual. La navegación autenticada se valida con los unitarios del frontend.
+
+```powershell
+pnpm exec playwright test tests/landing-carousel.spec.ts
+```
+
+No ejecutar todos los archivos contra la API de desarrollo: las suites con harness requieren su base aislada y el puerto 3001 libre, como se explica arriba.
+
 ## Verificaciones finales
 
 ```powershell
@@ -103,3 +113,41 @@ Se detectaron dos defectos reales durante la revisión: claves de caché privada
 Se inspeccionaron las capturas finales `.runtime/iteration2-landing-dark.png`, `.runtime/iteration2-home-light.png`, `.runtime/iteration2-dark.png` y `.runtime/iteration2-light.png`: texto, iconos, CTAs y cancha se renderizan completos; Home muestra un título sin repetir el filtro y las vistas móviles no se desbordan. Las capturas deshabilitan animaciones para evitar estados intermedios. No se versionan imágenes ni trazas con credenciales.
 
 Límites: el transporte real de email y los dominios de producción siguen fuera de esta validación local; las comprobaciones de contraste cubren los tokens y superficies observados, no constituyen una auditoría WCAG completa. Security Reviewer aceptó SLICE-02 sin bloqueos abiertos en `docs/tasks/finished/SLICE-02-security-review.md`. Recomendación de testing: aceptar el alcance validado. No se realizó commit.
+
+## Evidencia funcional del 7 de octubre de 2026: LAND-01
+
+Esta primera evidencia corresponde al alcance anterior de LAND-01, previo a la navegación pública unificada y al carrusel sin botones Anterior/Siguiente. La validación final vigente se registra en la sección siguiente.
+
+Resultado: **pass**. `pnpm exec playwright test tests/landing-carousel.spec.ts` aprobó **3/3 en 8,2 segundos** sobre el frontend compilado final y la API local existente. No se inició el harness API, no se crearon cuentas ni se modificaron datos. La orquestación confirmó lint, typecheck, build y **43/43 unitarios** (16 API, 27 frontend).
+
+Los casos independientes comprueban el texto exacto "Futbol en La Argentina", hero y CTAs conservados, ausencia de Partidos sólo en la landing visitante, acceso público a `/partidos`, registro/login sin signos de interrogación de apertura y ausencia de requests mutables. El carrusel conserva las tres copias aprobadas; controles Anterior/Siguiente deshabilitados en sus límites, indicadores con `aria-current`, activación con Enter y navegación ArrowLeft/ArrowRight/Home/End funcionan. Cada acción comprueba también que el scroll termina en la diapositiva seleccionada, no sólo el estado accesible. Un gesto táctil Chromium real desplaza hasta la segunda diapositiva y actualiza su indicador. No hay reproducción automática en la fuente; una observación acotada confirma que el carrusel permanece en la selección manual.
+
+Un primer intento de gesto con `Input.synthesizeScrollGesture` no desplazó el track. Se corrigió el generador del test usando `touchStart`, movimientos y `touchEnd`, verificando que las coordenadas alcanzan el track. La prueba dirigida y la suite final aprobaron sin cambiar producción ni expectativas.
+
+No se ejecutaron las nueve pruebas con harness contra la base de desarrollo: el cambio no modifica persistencia, autenticación ni contratos backend y los datos del usuario se preservaron. La navegación autenticada y reduced motion están cubiertos por los unitarios del frontend. Por instrucción del usuario, esta etapa no incluyó capturas, comprobaciones de contraste, inspección visual ni valoración del diseño. Recomendación de testing: aceptar el alcance funcional validado. No se realizó commit.
+
+## Validación final LAND-01 por fases: navegación, estados y carrusel
+
+Resultado: **pass**. La ejecución final de `tests/landing-carousel.spec.ts` aprobó **5/5 en 17,9 segundos** sobre el último frontend compilado. La orquestación confirmó lint, typecheck, build y **48/48 unitarios** (16 API, 32 frontend). Las pruebas se ejecutaron en el orden solicitado:
+
+1. **Navegación reutilizable:** landing, partidos, registro y login mantienen la navegación anónima sin Partidos; el CTA conserva acceso al descubrimiento público. Hero y textos aprobados permanecen. Las páginas de autenticación no muestran signos de interrogación de apertura. La navegación autenticada se cubre en los unitarios de frontend, sin crear cuentas nuevas.
+2. **404 y estados de datos:** una ruta inexistente responde HTTP 404, muestra una sola cabecera/footer y sus enlaces llevan al inicio o a partidos. Una request GET de partidos demorada mantiene el estado de carga con `aria-busy` y skeletons ocultos a tecnologías de asistencia. Al liberar la request real, Abasto devuelve cero partidos; aparecen explicación y acción Cambiar localidad, que abre el buscador y le da foco. Escape mantiene la selección actual. No se fabrican respuestas vacías ni se alteran datos del catálogo.
+3. **Carrusel manual final:** se conservan las tres copias; no existen Anterior/Siguiente. Indicadores responden a Enter y Space; teclado ArrowLeft/ArrowRight/Home/End respeta extremos. Cada transición termina en su posición real y actualiza `aria-current`. El test observa `scrollTo` sin sustituirlo: solicita smooth normalmente y auto con reduced motion. El gesto táctil real conserva scroll snap e indicador. La fuente no contiene autoplay y una observación finita conserva la selección manual.
+
+Una ejecución previa obtuvo 4/5 por una suposición incorrecta del nombre accesible del input cmdk: el contenedor Command lo nombra Localidades. Se corrigió el selector de test al placeholder público estable Buscar localidad…, comprobando además el foco. La suite final aprobó sin cambiar producción ni criterios.
+
+No se inició otro backend ni se usó el harness de autenticación; la API existente sólo recibió consultas públicas. No se enviaron emails, crearon cuentas, escribieron datos ni realizaron commits. Por solicitud explícita del usuario no hubo capturas, snapshots, valoración visual, controles de aspecto ni pruebas de contraste. Los estilos quedan para su revisión. Las nueve pruebas de la slice anterior no se repitieron contra los datos de desarrollo; los cambios no alteran persistencia ni contratos de autenticación. Recomendación: aceptar el alcance funcional probado.
+
+## Ajuste posterior de 404: NotFoundGlitch
+
+Validación independiente de navegador: **pass, 1/1 en 11,4 segundos**, ejecutando únicamente `pnpm exec playwright test tests/landing-carousel.spec.ts --grep 'unknown route'` sobre el frontend compilado final. Una ruta inexistente mantiene HTTP 404 y una única cabecera/footer; el heading accesible conserva el código 404 aunque sus glifos decorativos cambien, y vuelve a mostrar 404 al terminar el scramble. El subtítulo y ambos enlaces de recuperación funcionan. Una segunda visita con reduced motion mantiene HTTP 404 y el código decorativo 404 sin esperar animación. La revisión de fuente confirma exclusión de glifos decorativos del árbol accesible, guard de reduced motion y cancelación del RAF al desmontar.
+
+La orquestación confirmó lint, typecheck, build y **52/52 unitarios**: API 16/16; frontend 36/36 en seis archivos mediante `pnpm --filter web test --pool=threads --maxWorkers=1` (75,11 segundos). El intento con pool fork predeterminado agotó el tiempo de inicio antes de ejecutar casos; el reintento con threads y un worker aprobó sin cambiar la configuración del proyecto ni las expectativas. `git diff --check` aprobó. No se añadieron pruebas de persistencia ni se repitieron las otras pruebas funcionales porque el ajuste modifica únicamente 404 y no hay cambios backend. Recomendación: aceptar el alcance funcional validado. No hubo capturas, snapshots, revisión de aspecto, cuentas, emails, escrituras en base ni commits.
+
+## Ajuste posterior: carrusel con escenario 3D
+
+Resultado funcional: **pass**. Los dos casos adaptados verifican el estado activo y su copia, una sola diapositiva expuesta a tecnologías de asistencia, indicadores con Enter/Space, teclado con extremos, ausencia de Anterior/Siguiente y selección manual sin autoplay. Las mismas acciones siguen funcionando con reduced motion. Gestos táctiles reales cambian a la segunda diapositiva, vuelven a la primera y respetan el extremo inicial. No se utilizan posiciones de scroll: el escenario ahora cambia el estado de las tarjetas sin scroll snap.
+
+La primera ejecución con `--grep 'carousel|swipe'` coincidió también con el nombre del archivo y ejecutó los cinco casos funcionales: **5/5 en 11,6 segundos**. El filtro de títulos `--grep 'manual carousel|real mobile swipe'` seleccionó exactamente los dos casos del carrusel: **2/2 en 7,0 segundos**. El código y el caso de 404 no se modificaron; la ejecución adicional sólo recorrió las rutas públicas existentes.
+
+Orquestación confirmó lint, typecheck, build y **52/52 unitarios** (frontend 36/36 con pool threads y un worker en 50,62 segundos; API 16/16 en 2,02 segundos). No hubo capturas, snapshots, pruebas de transforms, tamaños, colores ni valoración visual. Tampoco cuentas, emails, escrituras de datos o commits. La representación visual del escenario 3D queda para la revisión del usuario. Recomendación: aceptar el comportamiento funcional probado.

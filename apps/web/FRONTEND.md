@@ -31,6 +31,16 @@ TanStack Query gestiona estado remoto; `useLocations` reutiliza el catálogo. Re
 
 La paleta de club azul/gris incorpora superficies translúcidas moderadas, tokens claros/oscuros y bordes de controles con contraste. No carga fuentes, imágenes ni scripts de terceros. `public/theme-init.js` aplica la preferencia antes de pintar mediante script estático del mismo origen, compatible con CSP `script-src 'self'`; no se altera la política de seguridad. `useTheme` escucha cambios de sistema y navegador; si storage está bloqueado conserva la selección sólo en memoria. `suppressHydrationWarning` se aplica exclusivamente a `html`, cuyos atributos modifica el bootstrap. Se respeta `prefers-reduced-motion`.
 
+## Carrusel informativo de la landing
+
+El hero conserva su título, descripción y acciones; el texto superior es `Futbol en La Argentina`, conforme al texto aprobado. La navegación oculta `Partidos` para visitantes en todas las rutas y conserva la opción en el Home autenticado. Las preguntas de los formularios usan signo de cierre sin signo de apertura y mantienen las tildes.
+
+Debajo del hero, `features/landing/benefits-carousel.tsx` presenta `Más fácil juntarse a jugar`: Elegí dónde jugar, Anotate a un partido y Sumá a tus compañeros. Es información aprobada del producto, sin implementar nuevas operaciones de reserva ni agregar enlaces a flujos futuros.
+
+El carrusel usa un escenario CSS 3D y estado React local, sin nuevas dependencias ni avance automático. El escenario se adapta al ancho de la sección con un máximo de 960 px. Las tarjetas de hasta 480 px usan una proporción cuadrada como tamaño preferido, con altura mínima según el contenido para evitar recortes. La tarjeta activa queda frontal; las laterales usan perspectiva, rotación y profundidad. Todas las tarjetas tienen superficie opaca con `var(--solid)` y opacidad completa en ambos temas, sin blur ni transparencias que superpongan textos y sin modificar los tokens base.
+
+Permite gestos horizontales manuales con Pointer Events, tres indicadores accesibles de 44 px y teclado ArrowLeft/ArrowRight/Home/End sobre el grupo enfocable. No contiene botones Anterior/Siguiente. Los gestos inferiores a 40 px, predominantemente verticales o cancelados no cambian la selección; el desplazamiento vertical de página y pinch zoom siguen habilitados. La navegación respeta los extremos y usa transiciones CSS suaves de 650 ms, desactivadas al solicitar reducción de movimiento. Las diapositivas inactivas tienen `aria-hidden` e `inert`. Un anuncio `sr-only` informa la posición a lectores de pantalla, sin contador visible. Tests unitarios cubren contenido aprobado, indicadores, teclado, gestos y cancelación, ausencia de autoplay y visibilidad contextual de navegación. Las pruebas de navegador cubren también teclado, gesto táctil y reducción de movimiento. La validación visual queda a cargo del usuario.
+
 ## Componentes compartidos y estados
 
 Los elementos reutilizables de presentación viven en `components/`: `SiteHeader`, `SiteFooter`, menú de cuenta y `ui/`. Se mantienen separados de los services, hooks y reglas de cada feature; `Shell` conserva su composición y el aviso de sesión.
@@ -38,6 +48,7 @@ Los elementos reutilizables de presentación viven en `components/`: `SiteHeader
 - `ui/skeleton.tsx`: `Skeleton({className?})` ofrece placeholders decorativos con `aria-hidden`, dimensiones ajustables por clase y animación deshabilitada con `prefers-reduced-motion`.
 - `ui/loading-state.tsx`: `LoadingState({label,children?})` anuncia una sola etiqueta con `role=status` y `aria-live=polite`. Sus hijos son placeholders excluidos del árbol accesible; no presenta datos ficticios.
 - `ui/empty-state.tsx`: `EmptyState({title,description,action?})` explica un resultado vacío real en una superficie glass y admite una acción útil fuera del anuncio. No contiene skeletons ni inventa acciones.
+- `app/not-found.tsx`: 404 del App Router usando `components/ui/be-ui-404-not-found.tsx` (`NotFoundGlitch`). Código 404 grande y centrado, subtítulo `Acá no hay partido`, explicación y enlaces Volver al inicio / Buscar un partido. Sólo renderiza contenido: el layout conserva un único encabezado, main y pie. Next.js maneja el estado HTTP; la prueba de navegador verifica el 404 real. El componente permite configurar código, textos, destinos y clases. Un único ciclo RAF comparte los glifos decorativos durante 700 ms, con actualizaciones cada 45 ms y cancelación al desmontar. El nombre accesible del h1 permanece estable; los glifos y capas de color son decorativos. Motion detecta reducción de movimiento para evitar el ciclo y CSS oculta las capas. No hay autoplay, llamadas API ni persistencia.
 
 Estas piezas reutilizan los tokens de ambos temas y no dependen de autenticación, almacenamiento, llamadas HTTP ni infraestructura nueva. La integración de loading y empty corresponde a cada feature y mantiene separados carga pendiente, resultado vacío y error.
 
