@@ -4,6 +4,8 @@ import { test as base, expect } from '@playwright/test';
 
 export type Mail = { to: string; kind: 'VERIFY' | 'RESET'; token: string };
 export const api = process.env.E2E_API_URL ?? 'http://localhost:3001/api/v1';
+const webOrigin = new URL(process.env.E2E_WEB_URL ?? 'http://localhost:3000').origin;
+const apiPort = Number(new URL(api).port || 80);
 const requireApi = createRequire(resolve('apps/api/package.json'));
 
 export function isolatedDatabase() {
@@ -26,8 +28,14 @@ export async function hashFixturePassword(password: string): Promise<string> {
 export const test = base.extend<object, { mailbox: Mail[] }>({
   mailbox: [async ({}, use) => {
     isolatedDatabase();
+    // Docker smoke tests use the actual container API; email-token tests still
+    // require the default in-process API with its mocked mailbox.
+    if (process.env.E2E_EXTERNAL_API === '1') {
+      await use([]);
+      return;
+    }
     Object.assign(process.env, {
-      NODE_ENV: 'development', PORT: '3001', CORS_ORIGINS: 'http://localhost:3000', FRONTEND_URL: 'http://localhost:3000',
+      NODE_ENV: 'development', PORT: String(apiPort), CORS_ORIGINS: webOrigin, FRONTEND_URL: webOrigin,
       JWT_SECRET: 'test-only-jwt-secret-longer-than-32-characters', CSRF_SECRET: 'test-only-csrf-secret-longer-than-32-characters',
     });
     const { Test } = requireApi('@nestjs/testing');
@@ -40,7 +48,7 @@ export const test = base.extend<object, { mailbox: Mail[] }>({
       .useValue({ send: async (to: string, kind: Mail['kind'], token: string) => { mailbox.push({ to, kind, token }); } }).compile();
     const app = module.createNestApplication({ logger: false });
     configureApplication(app);
-    await app.listen(3001, '127.0.0.1');
+    await app.listen(apiPort, '127.0.0.1');
     try { await use(mailbox); } finally { await app.close(); }
   }, { scope: 'worker', auto: true }],
 });

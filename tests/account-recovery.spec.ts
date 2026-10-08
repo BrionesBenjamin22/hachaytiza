@@ -80,7 +80,7 @@ test('profile sends real differences and password change revokes every session a
     // A separate login creates a distinct server session, rather than a copied cookie jar.
     await otherContext.request.get(`${api}/auth/csrf`);
     const csrf = (await (await otherContext.request.get(`${api}/auth/csrf`)).json()).csrfToken;
-    expect((await otherContext.request.post(`${api}/auth/login`, { headers: { Origin: 'http://localhost:3000', 'X-CSRF-Token': csrf }, data: { email, password } })).status()).toBe(200);
+    expect((await otherContext.request.post(`${api}/auth/login`, { headers: { Origin: new URL(process.env.E2E_WEB_URL ?? 'http://localhost:3000').origin, 'X-CSRF-Token': csrf }, data: { email, password } })).status()).toBe(200);
     await page.goto('/account/security');
     await page.getByLabel('Contraseña actual', { exact: true }).fill(password);
     await page.getByLabel('Nueva contraseña', { exact: true }).fill(newPassword);
