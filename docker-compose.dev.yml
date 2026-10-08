@@ -1,0 +1,15 @@
+﻿# Compiled images with the existing localhost development security contract.
+# No bind mounts, watch servers or automatic migrations/seeds.
+services:
+  api:
+    environment:
+      NODE_ENV: development
+  db:
+    ports:
+      - "127.0.0.1:${POSTGRES_PORT:-5432}:5432"
+
+# Host DB tooling needs an explicitly published local bridge.
+# The base remains internal; only this development override enables forwarding.
+networks:
+  db_network:
+    internal: false

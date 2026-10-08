@@ -108,6 +108,7 @@ POSTGRES_USER=hyt
 POSTGRES_DB=hyt
 POSTGRES_PORT=5432
 POSTGRES_PASSWORD=<contraseña-local>
+DOCKER_DATABASE_URL=postgresql://hyt:<password-codificada>@db:5432/hyt?schema=public
 DATABASE_URL=postgresql://hyt:<contraseña-local>@localhost:5432/hyt?schema=public
 
 JWT_SECRET=<secreto-aleatorio>
@@ -145,7 +146,7 @@ Los archivos `.env` y `.env.local` están ignorados por Git. No versionar sus va
 ### 3. Preparar la base de datos
 
 ```powershell
-docker compose up -d --wait db
+docker compose -f docker-compose.yml -f docker-compose.dev.yml up -d --wait db
 pnpm --filter api db:generate
 pnpm --filter api db:migrate
 ```
@@ -205,7 +206,7 @@ Usar **`localhost`** para acceder desde el navegador: las cookies de sesión man
 Detener API y frontend con `Ctrl+C` en sus terminales. Para detener la base conservando los datos:
 
 ```powershell
-docker compose stop db
+docker compose -f docker-compose.yml -f docker-compose.dev.yml stop db
 ```
 
 En siguientes ejecuciones basta con iniciar la base y ambos servidores. Después de actualizar el código, instalar dependencias si cambió el lockfile y ejecutar `db:generate` y `db:migrate` si cambió Prisma. Los partidos de demostración tienen fechas futuras al ejecutar el seed; si ya pasaron, volver a ejecutar el seed de desarrollo.
@@ -229,3 +230,7 @@ pnpm build
 ```
 
 `pnpm test:integration` requiere PostgreSQL aislado. `pnpm test:e2e` requiere el frontend compilado levantado y utiliza una API real con transporte de email en memoria. Seguir [tests/README.md](tests/README.md) para preparar el entorno de pruebas; no ejecutar estas suites contra la base de desarrollo habitual ni producción.
+
+## Stack completo con Docker
+
+Consultar [la guía Docker](docs/DOCKER.md) para construir web/API, levantar los tres servicios, aplicar migraciones manuales y operar el stack. Compose base no expone PostgreSQL; el desarrollo con procesos en host requiere el override documentado.
