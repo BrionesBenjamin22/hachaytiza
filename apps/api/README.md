@@ -82,3 +82,22 @@ pnpm --filter api test
 pnpm --filter api test:e2e
 pnpm --filter api build
 ```
+
+## Docker
+
+El contexto de build es la raíz del monorepo: `docker build -f apps/api/Dockerfile -t hyt-api:local .`. La imagen usa Node 22.23.3 sobre Debian Bookworm, pnpm 10.33.2 y el lockfile compartido. Instala únicamente las dependencias del workspace API; el runtime contiene dependencias de producción, el cliente Prisma generado para Linux, `dist/`, el schema y las migraciones. Prisma CLI se conserva como dependencia operativa para migraciones controladas; Nest CLI, Vitest, tsx y pnpm no forman parte del runtime.
+
+La API se ejecuta como `node` (UID/GID 1000), con `node dist/main.js`, y recibe señales directamente. Los hooks de shutdown de Nest activan el cierre de Prisma existente al recibir SIGTERM. Compose proporciona init, tiempo de cierre, redes y límites; los logs continúan en stdout/stderr. `GET /health` conserva su contrato de disponibilidad básica y no verifica persistencia: además del healthcheck se debe probar una operación real contra PostgreSQL.
+
+Después de iniciar `db`, revisar las migraciones y aplicarlas explícitamente usando la imagen backend:
+
+```bash
+docker compose run --rm --no-deps api node node_modules/prisma/build/index.js migrate deploy
+docker compose run --rm --no-deps api node prisma/seed.js
+```
+
+El segundo comando carga sólo el catálogo de localidades necesario y es idempotente. El seed está compilado con `tsconfig.seed.json` y conserva la ruta relativa a `localidades.json`; no requiere tsx en runtime. Para fixtures ficticios usar explícitamente el override local y `node prisma/seed.js --development`. Ninguna migración ni seed se ejecuta al arrancar la API. El CLI tiene que ejecutarse con `db` saludable y con las mismas variables runtime de la API. No copiar credenciales dentro de la imagen.
+
+Todas las variables de la API son runtime; el build no necesita `DATABASE_URL`, secretos ni claves de email. `DATABASE_URL` dentro del contenedor apunta al hostname Docker `db`, nunca a `localhost`; la variable `DOCKER_DATABASE_URL` de Compose mantiene ese valor independiente de la conexión usada por herramientas del host. `JWT_SECRET` y `CSRF_SECRET` deben ser aleatorios, distintos y de al menos 32 caracteres. `FRONTEND_URL` y `CORS_ORIGINS` apuntan al origen público que utiliza el navegador, no al hostname interno `web`.
+
+La topología base usa `NODE_ENV=production`, exige frontend HTTPS y email configurado. Para probar por HTTP en `localhost`, el override local usa `NODE_ENV=development` con los mismos artefactos compilados. Las cookies siguen siendo Secure, HttpOnly y SameSite=Lax; CSRF, Origin y CORS permanecen activos. El prefijo de cookies sigue el contrato existente según el entorno. La base no expone PostgreSQL al host; las herramientas locales que lo necesiten deben utilizar el override local con binding loopback. Ver [operación Docker](../../docs/DOCKER.md) para el flujo completo, build, arranque, cierre y validaciones.
